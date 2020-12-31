@@ -1,0 +1,10 @@
+D:\Fortranaly90\Fortranaly90\bin\Debug\Fortranaly90.exe.config
+D:\Fortranaly90\Fortranaly90\bin\Debug\Fortranaly90.exe
+D:\Fortranaly90\Fortranaly90\bin\Debug\Fortranaly90.pdb
+D:\Fortranaly90\Fortranaly90\obj\Debug\Fortranaly90.csprojResolveAssemblyReference.cache
+D:\Fortranaly90\Fortranaly90\obj\Debug\Fortranaly90.Fortranaly90.resources
+D:\Fortranaly90\Fortranaly90\obj\Debug\Fortranaly90.Properties.Resources.resources
+D:\Fortranaly90\Fortranaly90\obj\Debug\Fortranaly90.csproj.GenerateResource.Cache
+D:\Fortranaly90\Fortranaly90\obj\Debug\Fortranaly90.exe
+D:\Fortranaly90\Fortranaly90\obj\Debug\Fortranaly90.pdb
+D:\Fortranaly90\Fortranaly90\obj\Debug\Fortranaly90.Tree.resources

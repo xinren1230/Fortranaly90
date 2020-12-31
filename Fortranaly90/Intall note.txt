@@ -1,0 +1,9 @@
+1.Use CMD input(skip if already install chocolatey)
+@powershell -NoProfile -ExecutionPolicy unrestricted -Command “iex ((new-object net.webclient).DownloadString(‘https://chocolatey.org/install.ps1’))” && SET PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin
+
+2.Use CMD input to install graphviz
+choco install graphviz
+
+3.Then enjoy!
+
+please delete .dot and .png files in .f90 file folder if you want generate new network photos after revising the code.
