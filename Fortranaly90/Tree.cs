@@ -60,6 +60,18 @@ namespace Fortranaly90
             this.pictureBox_Graphviz.Load(received_address + "\\" + linklbl.Text + ".png");//读取图片显示
             USE90_Temp = textBox_USE_Modules.Text; //暂存USE_Modules供全局调用，用于下一步生成总脑图
             program90_Temp = linklbl.Text; //暂存名字供全局调用，用于下一步生成总脑图
+            //显示模块调用的函数
+            int beginIndex_Func = function90.IndexOf("####" + linklbl.Text);
+            int endIndex_Func = function90.Remove(beginIndex_Func,1).IndexOf("####" + linklbl.Text) + 1;
+            string strCut_Func = function90.Substring(beginIndex_Func, endIndex_Func - beginIndex_Func - 1).Replace("####"+linklbl.Text , string.Empty);//beginIndex-1是因为会多出一个回车符
+            textBox_Func.Text = strCut_Func.TrimStart('\r').TrimStart('\n');
+            //#
+            //显示模块定义的变量
+            int beginIndex_Var = variable90.IndexOf("####" + linklbl.Text);
+            int endIndex_Var = variable90.Remove(beginIndex_Var, 1).IndexOf("####" + linklbl.Text) + 1;
+            string strCut_Var = variable90.Substring(beginIndex_Var, endIndex_Var - beginIndex_Var - 1).Replace("####" + linklbl.Text, string.Empty);//beginIndex-1是因为会多出一个回车符
+            textBox_Var.Text = strCut_Var.TrimStart('\r').TrimStart('\n');
+            //#
         }
         protected void mainprogram90label_click(object sender, EventArgs e)//mainprogram的linklabel，跟上面linklabel_click差不多
         {
@@ -75,6 +87,19 @@ namespace Fortranaly90
             this.pictureBox_Graphviz.Load(received_address + "\\" + linklbl.Text + ".png");
             USE90_Temp = textBox_USE_Modules.Text;
             program90_Temp = linklbl.Text;
+            //显示模块的函数
+            int beginIndex_Func = function90.IndexOf("####" + linklbl.Text);
+            int endIndex_Func = function90.Remove(beginIndex_Func, 1).IndexOf("####" + linklbl.Text) + 1;
+            string strCut_Func = function90.Substring(beginIndex_Func, endIndex_Func - beginIndex_Func - 1).Replace("####" + linklbl.Text, string.Empty);//beginIndex-1是因为会多出一个回车符
+            textBox_Func.Text = strCut_Func.TrimStart('\r').TrimStart('\n');
+            //#
+            //显示模块定义的变量
+            int beginIndex_Var = variable90.IndexOf("####" + linklbl.Text);
+            int endIndex_Var = variable90.Remove(beginIndex_Var, 1).IndexOf("####" + linklbl.Text) + 1;
+            string strCut_Var = variable90.Substring(beginIndex_Var, endIndex_Var - beginIndex_Var - 1).Replace("####" + linklbl.Text, string.Empty);//beginIndex-1是因为会多出一个回车符
+            textBox_Var.Text = strCut_Var.TrimStart('\r').TrimStart('\n');
+            //#
+
             //字符串数组输出语句
             //string output_Array="";
             //foreach (var item in mList)//List用于存所有程序名
@@ -310,11 +335,11 @@ namespace Fortranaly90
         }
         private void btn_find_function_query_Click(object sender, EventArgs e)
         {
-            if (textBox_find.Text != string.Empty)
+            if (textBox_findfunc.Text != string.Empty)
             {
-                if (function90.IndexOf("\n" + textBox_find.Text + "\r") >= 0)
+                if (function90.IndexOf("\n" + textBox_findfunc.Text + "\r") >= 0)
                 {
-                    int beginIndex = function90.IndexOf(textBox_find.Text);
+                    int beginIndex = function90.IndexOf(textBox_findfunc.Text);
                     string function90_temp1 = function90.Remove(0, beginIndex);
                     int startIndex_temp = function90_temp1.IndexOf("####");
                     string function90_temp2 = function90_temp1.Remove(0, startIndex_temp);
@@ -450,7 +475,7 @@ namespace Fortranaly90
                             else if (fileContent.Contains("::"))
                             {
                                 int signIndex=fileContent.IndexOf("::");
-                                variable90 = variable90 + "\r\n" + fileContent.Remove(0, signIndex).Replace("::", string.Empty);
+                                variable90 = variable90 + "\r\n" + fileContent.Remove(0, signIndex).Replace("::", string.Empty).Split('=')[0];
                             }
                            
                         }
