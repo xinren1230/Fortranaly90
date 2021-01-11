@@ -475,7 +475,7 @@ namespace Fortranaly90
                             else if (fileContent.Contains("::"))
                             {
                                 int signIndex=fileContent.IndexOf("::");
-                                variable90 = variable90 + "\r\n" + fileContent.Remove(0, signIndex).Replace("::", string.Empty).Split('=')[0];
+                                variable90 = variable90 + "\r\n" + fileContent.Remove(0, signIndex).Replace("::", string.Empty).Split('=')[0].Split('(')[0];
                             }
                            
                         }
