@@ -70,7 +70,7 @@
             // 
             this.label_main.AutoSize = true;
             this.label_main.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_main.Location = new System.Drawing.Point(42, 13);
+            this.label_main.Location = new System.Drawing.Point(18, 10);
             this.label_main.Name = "label_main";
             this.label_main.Size = new System.Drawing.Size(70, 26);
             this.label_main.TabIndex = 4;
@@ -80,7 +80,7 @@
             // 
             this.label_module.AutoSize = true;
             this.label_module.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_module.Location = new System.Drawing.Point(42, 88);
+            this.label_module.Location = new System.Drawing.Point(22, 88);
             this.label_module.Name = "label_module";
             this.label_module.Size = new System.Drawing.Size(70, 26);
             this.label_module.TabIndex = 5;
@@ -88,14 +88,15 @@
             // 
             // panel_main
             // 
-            this.panel_main.Location = new System.Drawing.Point(45, 53);
+            this.panel_main.Location = new System.Drawing.Point(23, 50);
             this.panel_main.Name = "panel_main";
             this.panel_main.Size = new System.Drawing.Size(304, 38);
             this.panel_main.TabIndex = 7;
             // 
             // panel_module
             // 
-            this.panel_module.Location = new System.Drawing.Point(45, 127);
+            this.panel_module.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel_module.Location = new System.Drawing.Point(27, 127);
             this.panel_module.Name = "panel_module";
             this.panel_module.Size = new System.Drawing.Size(634, 686);
             this.panel_module.TabIndex = 8;
@@ -171,6 +172,8 @@
             this.panel1.Controls.Add(this.textBox_Var);
             this.panel1.Controls.Add(this.label_Var);
             this.panel1.Controls.Add(this.textBox_Func);
+            this.panel1.Controls.Add(this.panel_main);
+            this.panel1.Controls.Add(this.label_main);
             this.panel1.Controls.Add(this.label_Func);
             this.panel1.Controls.Add(this.GraphvizLink);
             this.panel1.Controls.Add(this.btn_findvar);
@@ -312,14 +315,12 @@
             this.Controls.Add(this.pictureBox_Graphviz);
             this.Controls.Add(this.textBox_Graphvizcode);
             this.Controls.Add(this.panel_module);
-            this.Controls.Add(this.panel_main);
             this.Controls.Add(this.label_module);
-            this.Controls.Add(this.label_main);
             this.Controls.Add(this.textBox_USE_Modules);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "Tree";
-            this.ShowIcon = false;
             this.Text = "Tree";
             this.Load += new System.EventHandler(this.Tree_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Graphviz)).EndInit();

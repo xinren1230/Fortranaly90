@@ -93,6 +93,7 @@
             this.Controls.Add(this.textBox_address);
             this.Controls.Add(this.btn_Browse);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "Fortranaly90";
             this.ShowIcon = false;
             this.Text = "Fortranaly90";
