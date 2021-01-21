@@ -50,64 +50,91 @@ namespace Fortranaly90
         protected void linklabel_click(object sender, EventArgs e)//module的linklabel
         {
             LinkLabel linklbl = (LinkLabel)sender;//获取动态LinkLabel的sender名,这句很有用可以动态的获取动态按钮的入口
-            int beginIndex = USE90.IndexOf(linklbl.Text + "####");
-            int endIndex = USE90.IndexOf("####" + linklbl.Text);
-            string strCut = USE90.Substring(beginIndex, endIndex - beginIndex - 1).Replace(linklbl.Text + "####", string.Empty);//beginIndex-1是因为会多出一个回车符
-            textBox_USE_Modules.Text = strCut.TrimStart('\r').TrimStart('\n');
-            textBox_Graphvizcode.Text = Graphvizcode(linklbl.Text, textBox_USE_Modules.Text);//调用Graphvizcode，生成Graphvizcode
-            save_Text(received_address, textBox_Graphvizcode.Text.Replace("\r\r", string.Empty), linklbl.Text);//调用save_Text，将Graphvizcode存到linklbl.Text.dot
-            CMD(received_address, "C:\\ProgramData\\chocolatey\\bin\\dot -Tpng " + linklbl.Text + ".dot -o " + linklbl.Text + ".png");//调用CMD 使用graphviz生成脑图
-            this.pictureBox_Graphviz.Load(received_address + "\\" + linklbl.Text + ".png");//读取图片显示
-            USE90_Temp = textBox_USE_Modules.Text; //暂存USE_Modules供全局调用，用于下一步生成总脑图
-            program90_Temp = linklbl.Text; //暂存名字供全局调用，用于下一步生成总脑图
-            //显示模块调用的函数
-            int beginIndex_Func = function90.IndexOf("####" + linklbl.Text);
-            int endIndex_Func = function90.Remove(beginIndex_Func,1).IndexOf("####" + linklbl.Text) + 1;
-            string strCut_Func = function90.Substring(beginIndex_Func, endIndex_Func - beginIndex_Func - 1).Replace("####"+linklbl.Text , string.Empty);//beginIndex-1是因为会多出一个回车符
-            textBox_Func.Text = strCut_Func.TrimStart('\r').TrimStart('\n');
+            //EventArgs继承自MouseEventArgs,所以可以强转
+            MouseEventArgs Mouse_e = (MouseEventArgs)e;
+            //点鼠标左键,return
+            if (Mouse_e.Button == MouseButtons.Left)
+            {
+                int beginIndex = USE90.IndexOf(linklbl.Text + "####");
+                int endIndex = USE90.IndexOf("####" + linklbl.Text);
+                string strCut = USE90.Substring(beginIndex, endIndex - beginIndex - 1).Replace(linklbl.Text + "####", string.Empty);//beginIndex-1是因为会多出一个回车符
+                textBox_USE_Modules.Text = strCut.TrimStart('\r').TrimStart('\n');
+                textBox_Graphvizcode.Text = Graphvizcode(linklbl.Text, textBox_USE_Modules.Text);//调用Graphvizcode，生成Graphvizcode
+                save_Text(received_address, textBox_Graphvizcode.Text.Replace("\r\r", string.Empty), linklbl.Text);//调用save_Text，将Graphvizcode存到linklbl.Text.dot
+                CMD(received_address, "C:\\ProgramData\\chocolatey\\bin\\dot -Tpng " + linklbl.Text + ".dot -o " + linklbl.Text + ".png");//调用CMD 使用graphviz生成脑图
+                this.pictureBox_Graphviz.Load(received_address + "\\" + linklbl.Text + ".png");//读取图片显示
+                USE90_Temp = textBox_USE_Modules.Text; //暂存USE_Modules供全局调用，用于下一步生成总脑图
+                program90_Temp = linklbl.Text; //暂存名字供全局调用，用于下一步生成总脑图
+                //显示模块调用的函数
+                int beginIndex_Func = function90.IndexOf("####" + linklbl.Text);
+                int endIndex_Func = function90.Remove(beginIndex_Func, 1).IndexOf("####" + linklbl.Text) + 1;
+                string strCut_Func = function90.Substring(beginIndex_Func, endIndex_Func - beginIndex_Func - 1).Replace("####" + linklbl.Text, string.Empty);//beginIndex-1是因为会多出一个回车符
+                textBox_Func.Text = strCut_Func.TrimStart('\r').TrimStart('\n');
+                //#
+                //显示模块定义的变量
+                int beginIndex_Var = variable90.IndexOf("####" + linklbl.Text);
+                int endIndex_Var = variable90.Remove(beginIndex_Var, 1).IndexOf("####" + linklbl.Text) + 1;
+                string strCut_Var = variable90.Substring(beginIndex_Var, endIndex_Var - beginIndex_Var - 1).Replace("####" + linklbl.Text, string.Empty);//beginIndex-1是因为会多出一个回车符
+                textBox_Var.Text = strCut_Var.TrimStart('\r').TrimStart('\n');
+            }
             //#
-            //显示模块定义的变量
-            int beginIndex_Var = variable90.IndexOf("####" + linklbl.Text);
-            int endIndex_Var = variable90.Remove(beginIndex_Var, 1).IndexOf("####" + linklbl.Text) + 1;
-            string strCut_Var = variable90.Substring(beginIndex_Var, endIndex_Var - beginIndex_Var - 1).Replace("####" + linklbl.Text, string.Empty);//beginIndex-1是因为会多出一个回车符
-            textBox_Var.Text = strCut_Var.TrimStart('\r').TrimStart('\n');
-            //#
+            if (Mouse_e.Button == MouseButtons.Right)
+            {
+                string fileNameFullPath = received_address + "\\" + linklbl.Text + ".f90";
+                if (System.IO.File.Exists(fileNameFullPath))//寻找是否有这文件，有，则执行
+                {
+                    System.Diagnostics.Process.Start(fileNameFullPath);//用默认程序打开
+                }
+                else
+                {
+                    MessageBox.Show("The module name does not match the file name !");
+                }
+            }
         }
         protected void mainprogram90label_click(object sender, EventArgs e)//mainprogram的linklabel，跟上面linklabel_click差不多
         {
             //textBox3.Text = USE90.TrimStart('\r'); 读取所有USE module
             LinkLabel linklbl = (LinkLabel)sender;//获取动态LinkLabel的sender名
-            int beginIndex = USE90.IndexOf(linklbl.Text + "####");
-            int endIndex = USE90.IndexOf("####" + linklbl.Text);
-            string strCut = USE90.Substring(beginIndex, endIndex - beginIndex - 1).Replace(linklbl.Text + "####", string.Empty);
-            textBox_USE_Modules.Text = strCut.TrimStart('\r').TrimStart('\n');
-            textBox_Graphvizcode.Text = Graphvizcode(linklbl.Text, textBox_USE_Modules.Text);//调用Graphvizcode，生成Graphvizcode
-            save_Text(received_address, textBox_Graphvizcode.Text.Replace("\r\r", string.Empty), linklbl.Text);//调用save_Text，将Graphvizcode存到linklbl.Text.dot
-            CMD(received_address, "C:\\ProgramData\\chocolatey\\bin\\dot -Tpng " + linklbl.Text + ".dot -o " + linklbl.Text + ".png");//调用CMD 使用graphviz生成脑图
-            this.pictureBox_Graphviz.Load(received_address + "\\" + linklbl.Text + ".png");
-            USE90_Temp = textBox_USE_Modules.Text;
-            program90_Temp = linklbl.Text;
-            //显示模块的函数
-            int beginIndex_Func = function90.IndexOf("####" + linklbl.Text);
-            int endIndex_Func = function90.Remove(beginIndex_Func, 1).IndexOf("####" + linklbl.Text) + 1;
-            string strCut_Func = function90.Substring(beginIndex_Func, endIndex_Func - beginIndex_Func - 1).Replace("####" + linklbl.Text, string.Empty);//beginIndex-1是因为会多出一个回车符
-            textBox_Func.Text = strCut_Func.TrimStart('\r').TrimStart('\n');
-            //#
-            //显示模块定义的变量
-            int beginIndex_Var = variable90.IndexOf("####" + linklbl.Text);
-            int endIndex_Var = variable90.Remove(beginIndex_Var, 1).IndexOf("####" + linklbl.Text) + 1;
-            string strCut_Var = variable90.Substring(beginIndex_Var, endIndex_Var - beginIndex_Var - 1).Replace("####" + linklbl.Text, string.Empty);//beginIndex-1是因为会多出一个回车符
-            textBox_Var.Text = strCut_Var.TrimStart('\r').TrimStart('\n');
-            //#
-
-            //字符串数组输出语句
-            //string output_Array="";
-            //foreach (var item in mList)//List用于存所有程序名
-            //{
-            //  output_Array = output_Array +"\r\n"+ item.ToString();
-            //}
-            //textBox1.Text = output_Array.TrimStart('\r');//
-            //#
+            //EventArgs继承自MouseEventArgs,所以可以强转
+            MouseEventArgs Mouse_e = (MouseEventArgs)e;
+            //点鼠标左键,return
+            if (Mouse_e.Button == MouseButtons.Left)
+            {
+                int beginIndex = USE90.IndexOf(linklbl.Text + "####");
+                int endIndex = USE90.IndexOf("####" + linklbl.Text);
+                string strCut = USE90.Substring(beginIndex, endIndex - beginIndex - 1).Replace(linklbl.Text + "####", string.Empty);
+                textBox_USE_Modules.Text = strCut.TrimStart('\r').TrimStart('\n');
+                textBox_Graphvizcode.Text = Graphvizcode(linklbl.Text, textBox_USE_Modules.Text);//调用Graphvizcode，生成Graphvizcode
+                save_Text(received_address, textBox_Graphvizcode.Text.Replace("\r\r", string.Empty), linklbl.Text);//调用save_Text，将Graphvizcode存到linklbl.Text.dot
+                CMD(received_address, "C:\\ProgramData\\chocolatey\\bin\\dot -Tpng " + linklbl.Text + ".dot -o " + linklbl.Text + ".png");//调用CMD 使用graphviz生成脑图
+                this.pictureBox_Graphviz.Load(received_address + "\\" + linklbl.Text + ".png");
+                USE90_Temp = textBox_USE_Modules.Text;
+                program90_Temp = linklbl.Text;
+                //显示模块的函数
+                int beginIndex_Func = function90.IndexOf("####" + linklbl.Text);
+                int endIndex_Func = function90.Remove(beginIndex_Func, 1).IndexOf("####" + linklbl.Text) + 1;
+                string strCut_Func = function90.Substring(beginIndex_Func, endIndex_Func - beginIndex_Func - 1).Replace("####" + linklbl.Text, string.Empty);//beginIndex-1是因为会多出一个回车符
+                textBox_Func.Text = strCut_Func.TrimStart('\r').TrimStart('\n');
+                //#
+                //显示模块定义的变量
+                int beginIndex_Var = variable90.IndexOf("####" + linklbl.Text);
+                int endIndex_Var = variable90.Remove(beginIndex_Var, 1).IndexOf("####" + linklbl.Text) + 1;
+                string strCut_Var = variable90.Substring(beginIndex_Var, endIndex_Var - beginIndex_Var - 1).Replace("####" + linklbl.Text, string.Empty);//beginIndex-1是因为会多出一个回车符
+                textBox_Var.Text = strCut_Var.TrimStart('\r').TrimStart('\n');
+                //#
+            }
+            if (Mouse_e.Button == MouseButtons.Right)
+            {
+                string fileNameFullPath = received_address + "\\" + linklbl.Text + ".f90";
+                if (System.IO.File.Exists(fileNameFullPath))//寻找是否有这文件，有，则执行
+                {
+                    System.Diagnostics.Process.Start(fileNameFullPath);//用默认程序打开
+                }
+                else
+                {
+                    MessageBox.Show("The module name does not match the file name !");
+                }
+            }
         }
         //General Network btn
         private void btn_Network_Click(object sender, EventArgs e)//生成总脑图
