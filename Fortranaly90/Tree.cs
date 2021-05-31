@@ -29,6 +29,7 @@ namespace Fortranaly90
         string Graphvizcode_temp = "";//暂存Graphvizcode
         string function90 = "";//存储所有使用的function和subroutine，各文件以####隔开，注意是全部文件的模块,也可以用DataTable
         string variable90 = "";//存储所有使用定义的variable，各文件以####隔开，注意是全部文件的模块,也可以用DataTable
+        string TEMP_VAR = "";//暂存储variable，先将变量以‘，’分割
         string funsubroutine90 = "";
         string callfun90 = "";
         string received_address; //用于从Fortranaly传递参数
@@ -382,16 +383,30 @@ namespace Fortranaly90
             {
                 string findvar_temp = "";
                 string variable90_temp = variable90;//variable90_temp用来暂放variable90，并每次执行while前重置
-                while (variable90_temp.IndexOf("\n" + textBox_findvar.Text + "\r") >= 0)//写"\n" +...+ "\r"主要为了防止比如说字母是被包含在变量名内的，所以也会被找到
+                while (variable90_temp.IndexOf("\n" + textBox_findvar.Text + "\r") >= 0 || variable90_temp.IndexOf("\n" + textBox_findvar.Text + "=") >= 0)//写"\n" +...+ "\r"主要为了防止比如说字母是被包含在变量名内的，所以也会被找到
                 {
-                    int beginIndex = variable90_temp.IndexOf("\n" + textBox_findvar.Text + "\r");
-                    string variable90_temp1 = variable90_temp.Remove(0, beginIndex);
-                    int startIndex_temp = variable90_temp1.IndexOf("####");
-                    string variable90_temp2 = variable90_temp1.Remove(0, startIndex_temp);
-                    int endIndex_temp = variable90_temp2.IndexOf("\r\n####");
-                    findvar_temp = findvar_temp + "\r\n" + "Result: in " + variable90_temp2.Substring(0, endIndex_temp).Replace("####", "");
-                    variable90_temp = variable90_temp.Remove(0, beginIndex + textBox_findvar.Text.Length+1);
-                    //textBox1.Text = variable90;
+                    if (variable90_temp.IndexOf("\n" + textBox_findvar.Text + "\r") >= 0)
+                    {
+                        int beginIndex = variable90_temp.IndexOf("\n" + textBox_findvar.Text + "\r");
+                        string variable90_temp1 = variable90_temp.Remove(0, beginIndex);
+                        int startIndex_temp = variable90_temp1.IndexOf("####");
+                        string variable90_temp2 = variable90_temp1.Remove(0, startIndex_temp);
+                        int endIndex_temp = variable90_temp2.IndexOf("\r\n####");
+                        findvar_temp = findvar_temp + "\r\n" + "Result: in " + variable90_temp2.Substring(0, endIndex_temp).Replace("####", "");
+                        variable90_temp = variable90_temp.Remove(0, beginIndex + textBox_findvar.Text.Length + 1);
+                        //textBox1.Text = variable90;
+                    }
+                    else
+                    {
+                        int beginIndex = variable90_temp.IndexOf("\n" + textBox_findvar.Text + "=");
+                        string variable90_temp1 = variable90_temp.Remove(0, beginIndex);
+                        int startIndex_temp = variable90_temp1.IndexOf("####");
+                        string variable90_temp2 = variable90_temp1.Remove(0, startIndex_temp);
+                        int endIndex_temp = variable90_temp2.IndexOf("\r\n####");
+                        findvar_temp = findvar_temp + "\r\n" + "Result: in " + variable90_temp2.Substring(0, endIndex_temp).Replace("####", "");
+                        variable90_temp = variable90_temp.Remove(0, beginIndex + textBox_findvar.Text.Length + 1);
+                        //textBox1.Text = variable90;
+                    }
                 }
                 if (findvar_temp != "")
                 {
@@ -502,7 +517,8 @@ namespace Fortranaly90
                             else if (fileContent.Contains("::"))
                             {
                                 int signIndex=fileContent.IndexOf("::");
-                                variable90 = variable90 + "\r\n" + fileContent.Remove(0, signIndex).Replace("::", string.Empty).Split('=')[0].Split('(')[0];
+                                TEMP_VAR = fileContent.Remove(0, signIndex).Replace("::", string.Empty);// 前面.Split('=')[0].Split('(')[0],但后面删除了
+                                variable90 = variable90 + "\r\n" + TEMP_VAR;
                             }
                            
                         }
